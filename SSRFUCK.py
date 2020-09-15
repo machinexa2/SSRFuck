@@ -23,7 +23,7 @@ ssrf_obj = SSRFuck()
 input_wordlist = [line.rstrip('\n') for line in open(argv.wordlist)]
 
 def main():
-    x = ssrf_obj.gen_payloads(input_wordlist, FPathApp.urler(FPathApp.urler(argv.server)))
+    x = ssrf_obj.gen_payloads(input_wordlist, FPathApp.urler(FPathApp.slasher(argv.server)))
     temp_x = [z for y in x for z in y]
     with ThreadPoolExecutor(max_workers=argv.threads) as Exec:
         futures_objects = [Exec.submit(ssrf_obj.gethead, triable) for triable in temp_x]
