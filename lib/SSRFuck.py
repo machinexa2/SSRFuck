@@ -1,19 +1,19 @@
-from termcolor import colored
 from random import randint
+from termcolor import colored
 from urllib.parse import urlparse
 from faster_than_requests import head, get
 from concurrent.futures import ThreadPoolExecutor
 
+from lib.Globals import ColorObj
 from lib.ParamReplacer import ParamReplace
 from lib.PathFunctions import PathFunction
-from lib.Globals import ColorObj
 
 class SSRFuck:
     def __init__(self):
         self.Replacer = ParamReplace()
         self.Function = PathFunction()
 
-    def generate_payloads(self, URLs: list, replace_str: str) -> tuple:
+    def generate_payloads(self, URLs: list, replace_string: str) -> tuple:
         payloads_url = []
         for URL in URLs:   
             print(f"{ColorObj.information} Generating payload for: {colored(URL, color='cyan')}")
@@ -21,8 +21,8 @@ class SSRFuck:
             if not half_payload.query:
                 continue
             else:
-                param, value = self.Replacer.expand_parameter(half_payload.query)
-                replacer_list = self.Replacer.replacement(param, value, replace_str)
+                parameter, value = self.Replacer.expand_parameter(half_payload.query)
+                replacer_list = self.Replacer.replacement(parameter, value, replace_string)
                 full_payload = self.Replacer.gen_url(self.Function.urler('') + half_payload.netloc + half_payload.path, replacer_list)
                 payloads_url.append(full_payload)
         return payloads_url
