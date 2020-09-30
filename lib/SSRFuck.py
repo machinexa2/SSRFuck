@@ -1,7 +1,7 @@
-from requests import Session
 from termcolor import colored
-from random import randint as rdi
+from random import randint
 from urllib.parse import urlparse
+from faster_than_requests import head, get
 from concurrent.futures import ThreadPoolExecutor
 
 from lib.ParamReplacer import ParamReplace
@@ -12,9 +12,8 @@ class SSRFuck:
     def __init__(self):
         self.Replacer = ParamReplace()
         self.Function = PathFunction()
-        self.s = Session()
 
-    def gen_payloads(self, URLs: list, replace_str: str) -> tuple:
+    def generate_payloads(self, URLs: list, replace_str: str) -> tuple:
         payloads_url = []
         for URL in URLs:   
             print(f"{ColorObj.information} Generating payload for: {colored(URL, color='cyan')}")
@@ -28,16 +27,16 @@ class SSRFuck:
                 payloads_url.append(full_payload)
         return payloads_url
  
-    def gethead(self, URL: str) -> bool:
+    def try_payload(self, URL: str) -> bool:
         try:
-            if rdi(0,1) == 0:
+            if randint(0,1) == 0:
                 print(f"{ColorObj.good} Trying to get {colored(URL, color='cyan')}")
-                s.get(URL, timeout=9)
-            elif rdi(0,1) == 1:
+                get(URL, timeout=5000)
+            elif randint(0,1) == 1:
                 print(f"{ColorObj.good} Trying to head {colored(URL, color='cyan')}")
-                s.head(URL, timeout=9)
+                head(URL, timeout=5000)
             else:
                 print(f"{ColorObj.good} Trying to get {colored(URL, color='cyan')}")
-                s.head(URL, timeout=9)
+                get(URL, timeout=5000)
         except Exception as E:
             print(E,E.__class__)
