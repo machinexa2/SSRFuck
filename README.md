@@ -3,7 +3,9 @@
 Inspiried by `jsfuck` and `brainfuck`, two words which have no relation with my tool. Test for SSRF against a list of URLs
 
 ## Features
-1. Threaded testing of SSRF against a list of URLs (hakrawler,gau).
+1. Threaded testing of SSRF against a list of URLs.
+2. Use of faster_than_requests for fastness!
+3. Three input modes to be used with other tool!
 
 ## Usage
 ```
@@ -27,9 +29,12 @@ Check your server logs
 ```
 
 ## Example
-General SSRF 
-* ```SSRFuck -w path/to/file.txt -oD `pwd` -t 1 -d domainname.txt -s SERVERNAME```  
-where servername = your bxssrf+ngrok, burpcollaborator etc
+1. General SSRF (using wordlist)
+* ```SSRFuck -w hakrawler.data -t 100 -s SERVERNAME```  
+2. General SSRF (using url)
+* ```SSRFuck -u http://localhost:80/?file=page.html -s SERVERNAME```
+3. General SSRF (using stdin)
+* ```echo "uber.com" | hakrawler -plain -depth 5 | SSRFuck --- -t 100 -s SERVERNAME```
 
 ## Caveats
 1. None i guess.
