@@ -1,6 +1,14 @@
 class PathFunction:
     def __init__(self):
         pass
+
+    def merge(self, xpath: str, ypath: str) -> str:
+        if not xpath or not ypath:
+            return ""
+        xpath = self.urlerslasher(xpath) 
+        ypath = self.payloader(ypath)
+        zpath = xpath + ypath
+        return zpath
     
     def urlerslasher(self, xpath: str) -> str:
         if not xpath:
