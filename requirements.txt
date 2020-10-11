@@ -1,3 +1,4 @@
-faster_than_requests
 requests
 termcolor
+pyngrok
+faster_than_requests

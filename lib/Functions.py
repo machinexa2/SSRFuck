@@ -12,8 +12,8 @@ def starter(argv):
     if argv.banner:
         banner()
         exit(0)
-    if not argv.server or not argv.auto:
-        print(f"{ColorObj.bad} Server not provided")
+    if not argv.server and not argv.auto:
+        print(f"{ColorObj.bad} Use --help")
         exit()
     if not argv.wordlist:
         if not argv.url:
