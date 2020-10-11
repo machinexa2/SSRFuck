@@ -3,8 +3,8 @@ from termcolor import colored
 from lib.Globals import ColorObj
 
 def banner():
-    from pyfiglet import print_figlet
-    print_figlet('SSRFuck', font='larry3d', colors='BLUE')
+    banner = '\x1b[5m\x1b[1m\x1b[40m\x1b[31m   __________ ____  ______           __  \n  / ___/ ___// __ \\/ ____/_  _______/ /__\n  \\__ \\\\__ \\/ /_/ / /_  / / / / ___/ //_/\n ___/ /__/ / _, _/ __/ / /_/ / /__/ ,<   \n/____/____/_/ |_/_/    \\__,_/\\___/_/|_|  \n                                         \n\x1b[0m'
+    print(banner)
     print(colored('Let"s hunt for SSRF!', color='red', attrs=['bold']))
 
 def starter(argv):
