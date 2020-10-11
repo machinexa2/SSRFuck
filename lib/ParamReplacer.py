@@ -1,6 +1,3 @@
-from urllib.parse import urlparse
-from re import findall
-
 class ParamReplace:
     def __init__(self):
         pass
@@ -20,7 +17,7 @@ class ParamReplace:
             c_counter = []
         return par_var
 
-    def gen_url(self, half_url: str, replaced_parameter: list) -> list:
+    def generate_url(self, half_url: str, replaced_parameter: list) -> list:
         url_var = []
         for each in replaced_parameter:
             if half_url[-1] != "?":
@@ -30,6 +27,7 @@ class ParamReplace:
         return url_var
 
     def expand_parameter(self, query_data: str) -> tuple:
+        from re import findall
         p,q = [],[]
         for parameters,values in findall(r'([^&]+)=([^&]+)', query_data):
             p.append(parameters)
@@ -42,6 +40,6 @@ class ParamReplace:
     def auto(self, upto_path_url, urllib_query, replace_str):
         apath, bpath = self.expand_parameter(urllib_query)
         xpath = self.replacement(apath, bpath, replace_str)
-        ypath = self.gen_url(upto_path_url, xpath)
+        ypath = self.generate_url(upto_path_url, xpath)
         return ypath
 

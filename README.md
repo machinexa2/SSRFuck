@@ -36,5 +36,5 @@ Check your server logs
 3. General SSRF (using stdin)
 * ```echo "uber.com" | hakrawler -plain -depth 5 | SSRFuck --- -t 100 -s SERVERNAME```
 
-## Caveats
-1. None i guess.
+## Note
+* Download from releases as they are more stable. If you want to become beta tester, use directly SSRFUCK.py and report issue

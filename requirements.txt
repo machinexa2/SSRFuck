@@ -1,0 +1,3 @@
+faster_than_requests
+requests
+termcolor

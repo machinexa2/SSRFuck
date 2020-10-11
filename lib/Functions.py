@@ -5,17 +5,22 @@ from lib.Globals import ColorObj
 def banner():
     from pyfiglet import print_figlet
     print_figlet('SSRFuck', font='larry3d', colors='BLUE')
-    print(colored('A SSRF Finding tool!', color='red', attrs=['bold']))
-    print(colored('Use SSRF payload everywhere!', color='red', attrs=['bold']))
+    print(colored('Let"s hunt for SSRF!', color='red', attrs=['bold']))
 
 def starter(argv):
+    from sys import stdin
     if argv.banner:
         banner()
         exit(0)
+    if not argv.server or not argv.auto:
+        print(f"{ColorObj.bad} Server not provided")
+        exit()
     if not argv.wordlist:
         if not argv.url:
-            print("{} Use --help".format(ColorObj.bad))
-            exit()
+            if not argv.stdin:
+                print("{ColorObj.bad} Use --help")
+            else:
+                return [i.strip(' ') for i in stdin.read().split('\n') if i]
         else:
             return [argv.url.rstrip(' ')]
     else:
