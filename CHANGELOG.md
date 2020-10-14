@@ -1,3 +1,7 @@
+# Version 2.2
+* Improvements in engine, loops speed increased and unnecessary code removed
+* Less verbose and modules import improved
+
 # Version 2.1
 * Added feature of --auto to automatically generate public url, 
 * Documented --auto in README.md, requirements.txt updated

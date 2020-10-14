@@ -2,20 +2,21 @@ class ParamReplace:
     def __init__(self):
         pass
     
-    def replacement(self, parameter: str, value: str, replace_str: str) -> list:
-        c_counter  = []
-        par_var = []
+    def replacement(self, parameter: list, value: list, replace_str: str) -> list:
+        small_counter  = []
+        parameter_list = []
+        parameter_length = len(parameter)
         counter = 0
-        while counter != len(parameter):
+        while counter != parameter_length:
             temp = value[counter]
-            for i in range(len(parameter)):
+            for i in range(parameter_length):
                 value[counter] = replace_str
-                c_counter.append(parameter[i] + '=' + value[i])
-            par_var.append(c_counter)
+                small_counter.append(parameter[i] + '=' + value[i])
+            parameter_list.append(small_counter)
             value[counter] = temp
             counter += 1
-            c_counter = []
-        return par_var
+            small_counter = []
+        return parameter_list
 
     def generate_url(self, half_url: str, replaced_parameter: list) -> list:
         url_var = []
@@ -37,9 +38,8 @@ class ParamReplace:
         else:
             return p,q
 
-    def auto(self, upto_path_url, urllib_query, replace_str):
-        apath, bpath = self.expand_parameter(urllib_query)
+    def auto(self, upto_path_url, parsed_query, replace_str):
+        apath, bpath = self.expand_parameter(parsed_query)
         xpath = self.replacement(apath, bpath, replace_str)
         ypath = self.generate_url(upto_path_url, xpath)
         return ypath
-
