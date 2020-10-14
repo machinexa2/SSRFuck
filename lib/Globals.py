@@ -19,5 +19,4 @@ headers = lambda x: {
     'X-Real-Ip': x,
     'X-Remote-Addr': x,
     'Referer': x,
-    'User-Agent': x,
 }

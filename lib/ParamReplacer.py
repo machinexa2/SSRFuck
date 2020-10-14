@@ -1,6 +1,7 @@
 class ParamReplace:
     def __init__(self):
-        pass
+        from re import findall
+        self.f = findall
     
     def replacement(self, parameter: list, value: list, replace_str: str) -> list:
         small_counter  = []
@@ -28,9 +29,8 @@ class ParamReplace:
         return url_var
 
     def expand_parameter(self, query_data: str) -> tuple:
-        from re import findall
         p,q = [],[]
-        for parameters,values in findall(r'([^&]+)=([^&]+)', query_data):
+        for parameters,values in self.f(r'([^&]+)=([^&]+)', query_data):
             p.append(parameters)
             q.append(values)
         if len(p) != len(q):

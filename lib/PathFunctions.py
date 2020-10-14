@@ -18,7 +18,7 @@ class PathFunction:
     
     def slasher(self, xpath: str) -> str:
         if not xpath:
-            return xpath + '/'
+            return xpath
         if xpath[-1] != '/':
             ypath = xpath + '/'
         else:
@@ -36,7 +36,7 @@ class PathFunction:
     
     def questioner(self, xpath: str) -> str:
         if not xpath:
-            return xpath + '?'
+            return xpath
         if xpath[-1] != '?':
             ypath = xpath + '?'
         else:
