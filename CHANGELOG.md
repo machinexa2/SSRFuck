@@ -1,3 +1,7 @@
+# Version 2.3
+* Changes in main program and lib.PathFunctions
+* Other small changes
+
 # Version 2.2
 * Improvements in engine, loops speed increased and unnecessary code removed
 * Less verbose and modules import improved

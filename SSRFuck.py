@@ -33,10 +33,10 @@ def main():
     elif argv.auto:
         if ',' in argv.auto:
             server_path, public_path = argv.auto.split(',')
-            public_url = path_fn.unslasher(path_fn.slasher(ngrok.connect(port = port)) + path_fn.payloader(public_path))
+            public_url = path_fn.unender(path_fn.ender(ngrok.connect(port = port), '/') + path_fn.unstarter(public_path, '/'), '/')
         else:
             server_path = argv.auto
-            public_url = path_fn.unslasher(ngrok.connect(port = port))
+            public_url = path_fn.unender(ngrok.connect(port = port), '/')
         c = f"(cd {server_path}; fuser -k {port}/tcp 1>/dev/null 2>/dev/null; php -S 0.0.0.0:{port} 1>/dev/null 2>/dev/null &)"
         system(c)
         print(f"{ColorObj.information} URL generated: {public_url} ")
