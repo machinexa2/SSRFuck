@@ -2,75 +2,60 @@ from lib.PathFunctions import PathFunction
 
 class Skip:
     def __init__(self):
-        self.exist = False 
+        self.PathFunctions = PathFunction()
         self.path_list = []
         self.netloc_list = []
         self.parameter_list = {}
-        self.unique_parameter_list = {}
-        self.path_fn = PathFunction()
+        self.uparameter_list = {}
 
-    def add_path(self, path_to_add: str) -> bool:
-        if path_to_add in self.path_list:
+    def add_netloc(self, netloc: str) -> bool:
+        if self.check_netloc(netloc):
             return False
-        else:
-            self.path_list.append(path_to_add)
-            return True
+        self.netloc_list.append(netloc)
+        return True
+
+    def add_path(self, path: str) -> bool:
+        if self.check_path(path):
+            return False
+        self.path_list.append(path)
+        return True
 
     def add_parameter(self, url: str, parameter_list: list) -> list:
-        url = self.path_fn.ender(url, '?')
-        if url in self.parameter_list:
-             var = self.parameter_list[url]
-             var.update(set(parameter_list))
-             self.parameter_list[url] = var
-        else:
-             self.parameter_list[url] = set(parameter_list)
-        return self.parameter_list[url] 
-    
-    def add_unique_parameter(self, parameter_list: list) -> bool:
-        for parameter in parameter_list:
-            if not parameter in self.unique_parameter_list:
-                self.unique_parameter_list[parameter] = 0
-            else:
-                self.unique_parameter_list[parameter] += 1
+        url = self.PathFunctions.ender(url, '?')
+        if bool(self.parameter_list.get(url)):
+            var = self.parameter_list[url]
+            var.update(set(parameter_list))
+            self.parameter_list[url] = var
+            return False
+        self.parameter_list[url] = set(parameter_list)
         return True
- 
-    def add_netloc(self, netloc: str) -> bool:
-        if netloc in self.netloc_list:
-            return False
-        else:
-            self.netloc_list.append(netloc)
-            return True
-
-    def check_path(self, path_to_add: str) -> bool:
-        if path_to_add in self.path_list:
-            return True
-        else:
-            return False
 
     def check_netloc(self, netloc: str) -> bool:
-        if netloc in self.netloc_list:
-            return True
-        else:
-            return False
+        return bool(netloc in self.netloc_list)
 
-    def check_parameter(self, url: str, parameter: str):
-        url = self.path_fn.ender(url, '?')
-        try:
-            if self.parameter_list[url]:
-                self.exist = True
-        except:
-            self.exist = False
-        if self.exist:
-            parameters_list = self.parameter_list[url]
-            for param in parameters_list:
-                if parameter == param:
+    def check_path(self, path: str) -> bool:
+        return bool(path in self.path_list)
+
+    def check_parameter(self, url: str, parameter: str) -> bool:
+        url = self.PathFunctions.ender(url, '?')
+        exist = bool(self.parameter_list.get(url))
+        if exist:
+            for self_parameter in self.parameter_list[url]:
+                if self_parameter == parameter:
                     return True
         return False
 
+    def add_unique_parameter(self, parameter_list: list) -> bool:
+        for parameter in parameter_list:
+            if not parameter in self.uparameter_list:
+                self.uparameter_list[parameter] = 0
+            else:
+                self.uparameter_list[parameter] += 1
+        return True
+
     def check_unique_parameter(self, parameter: str):
-        if not parameter in self.unique_parameter_list:
+        if not parameter in self.uparameter_list:
             return False
-        if self.unique_parameter_list[parameter] >= 75:
-            return True
-        else:
+        if self.uparameter_list[parameter] >= 75:
             return False
+        return True
