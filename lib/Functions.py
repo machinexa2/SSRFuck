@@ -1,6 +1,6 @@
 from requests import get
 from termcolor import colored
-from base64 import b64encode
+from pybase64 import b64encode
 
 from lib.Globals import ColorObj, headers
 
@@ -22,11 +22,11 @@ def starter(argv):
             if not argv.stdin:
                 print("{ColorObj.bad} Use --help")
             else:
-                return [i.strip(' ') for i in stdin.read().split('\n') if i]
+                return (line.rstrip('\n').strip(' ') for line in stdin.read().split('\n') if line)
         else:
             return [argv.url.rstrip(' ')]
     else:
-        return [line.rstrip('\n') for line in open(argv.wordlist)]
+        return (line.rstrip('\n') for line in open(argv.wordlist) if line)
 
 def try_payload(url: str) -> bool:
         token = str(b64encode(url.encode()).decode())

