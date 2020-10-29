@@ -1,6 +1,8 @@
 # Version 2.4
-* Libraries fixes such as skipper
 * Generators instead of list for improved memory
+* Huge changes in PathFunction and Skipper
+* Improved variable naming convention
+* Lots of performances improvement
 
 # Version 2.3
 * Changes in SSRFuck.py and lib.PathFunctions

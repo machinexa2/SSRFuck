@@ -1,7 +1,7 @@
 from lib.ColoredObject import Color
 
 port = 10101
-ColorObj = Color()
+Color = Color()
 headers = lambda x: {
     'X-Forwarded': x,
     'X-Forwarded-By': x,
